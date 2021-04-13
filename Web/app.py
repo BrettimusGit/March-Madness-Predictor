@@ -3,12 +3,12 @@ import json
 import pandas as pd
 import numpy as np
 import os
-# from modelHelper import ModelHelper
+from modelHelper import ModelHelper
 import pickle
 #init app and class
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-# modelHelper = ModelHelper()
+modelHelper = ModelHelper()
 
 #endpoint
 # Favicon
@@ -35,6 +35,35 @@ def machine():
     # Return template and data
     return render_template("mLearning.html")
 
+# Route to render index.html template
+@app.route("/data")
+def data():
+    # Return template and data
+    return render_template("madnessData.html")
+
+@app.route("/makePredictions", methods=["POST"])
+def makePredictions():
+    content=request.json["data"]
+    yr1 = int(content["year1"])
+    yr2 = int(content["year2"])
+
+    avg_yr1 = pd.read_csv(f'static/data/full_avg_{yr1}.csv')
+    gb_yr1 = pickle.load(open(f'static/models/finalized_model_{yr1}.sav', 'rb'))
+    avg_yr2 = pd.read_csv(f'static/data/full_avg_{yr2}.csv')
+    gb_yr2 = pickle.load(open(f'static/models/finalized_model_{yr2}.sav', 'rb'))
+    
+
+    teamA = str(content["team1"])
+    teamB = str(content["team2"])
+
+    
+    prediction = modelHelper.get_matchup(teamA, yr1, avg_yr1, gb_yr1, teamB, yr2, avg_yr2, gb_yr2)
+    print(prediction)
+    return(jsonify({"ok": True, "prediction": prediction}))
+
+####################################
+# ADD MORE ENDPOINTS
+####################################
 
 @app.after_request
 def add_header(r):
