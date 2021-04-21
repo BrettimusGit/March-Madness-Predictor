@@ -44,15 +44,15 @@ def data():
 @app.route("/makePredictions", methods=["POST"])
 def makePredictions():
     content=request.json["data"]
+    print(content["year1"])
     yr1 = int(content["year1"])
     yr2 = int(content["year2"])
 
-    avg_yr1 = pd.read_csv(f'static/data/full_avg_{yr1}.csv')
-    gb_yr1 = pickle.load(open(f'static/models/finalized_model_{yr1}.sav', 'rb'))
-    avg_yr2 = pd.read_csv(f'static/data/full_avg_{yr2}.csv')
-    gb_yr2 = pickle.load(open(f'static/models/finalized_model_{yr2}.sav', 'rb'))
+    avg_yr1 = pd.read_csv(f'Web/static/data/full_avg_{yr1}.csv')
+    gb_yr1 = pickle.load(open(f'Web/static/models/finalized_model_{yr1}.sav', 'rb'))
+    avg_yr2 = pd.read_csv(f'Web/static/data/full_avg_{yr2}.csv')
+    gb_yr2 = pickle.load(open(f'Web/static/models/finalized_model_{yr2}.sav', 'rb'))
     
-
     teamA = str(content["team1"])
     teamB = str(content["team2"])
 
