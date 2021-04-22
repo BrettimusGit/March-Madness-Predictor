@@ -44,7 +44,7 @@ def data():
 @app.route("/makePredictions", methods=["POST"])
 def makePredictions():
     content=request.json["data"]
-    print(content["year1"])
+    
     yr1 = int(content["year1"])
     yr2 = int(content["year2"])
 
